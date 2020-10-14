@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+  labels:
+    istio-injection: enabled
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: app-v1
+  namespace: app
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: app-v1
+  template:
+    metadata:
+      labels:
+        app: app-v1
+    spec:
+      containers:
+      - name: app-v1
+        image: containous/traefikee-webapp-demo:v2
+        imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-v1
+  namespace: app
+  labels:
+    app: app-v1
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    name: app-v1
+  selector:
+    app: app-v1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-external
+  namespace: app
+spec:
+  type: ExternalName
+  externalName: app-v1.app.svc.cluster.local
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-tls
+  namespace: app
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`app.istio.traefiklabs.tech`)
+      services:
+        - name: app-external
+          port: 80
+          passHostHeader: false

@@ -1,0 +1,24 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: app
+  namespace: app
+spec:
+  selector:
+    matchLabels:
+      app: app-v1
+  mtls:
+    mode: STRICT
+    # mode: PERMISSIVE
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: app
+spec:
+  host: app-v1.app.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
