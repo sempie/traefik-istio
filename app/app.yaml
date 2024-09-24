@@ -13,7 +13,7 @@ metadata:
   name: app-v1
   namespace: app
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       app: app-v1
@@ -35,6 +35,8 @@ metadata:
   namespace: app
   labels:
     app: app-v1
+  annotations:
+    traefik.ingress.kubernetes.io/service.nativelb: "true"
 spec:
   type: ClusterIP
   ports:
@@ -49,12 +51,14 @@ kind: Service
 metadata:
   name: app-external
   namespace: app
+  annotations:
+    traefik.ingress.kubernetes.io/service.nativelb: "true"
 spec:
   type: ExternalName
   externalName: app-v1.app.svc.cluster.local
 
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: app-tls
@@ -64,7 +68,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`app.istio.traefiklabs.tech`)
+      match: Host(`app.wmtls.demo.traefiklabs.tech`)
       services:
         - name: app-external
           port: 80

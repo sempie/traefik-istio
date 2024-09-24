@@ -6,7 +6,7 @@ Assume you have a running kubernetes cluster
 
 ```
 curl -L https://istio.io/downloadIstio | sh -
-./istio-1.7.3/bin/istioctl install --set profile=demo
+./istio-1.23.2/bin/istioctl install --set profile=demo
 ```
 
 ### Install Traefik
