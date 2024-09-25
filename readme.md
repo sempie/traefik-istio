@@ -9,6 +9,13 @@ curl -L https://istio.io/downloadIstio | sh -
 ./istio-1.23.2/bin/istioctl install --set profile=minimal
 ```
 
+### Set Traefik Public Domain
+set env variable with the domain suffix for dashboard and app (replace with your own)
+```
+export mtls.demo.traefiklabs.tech=[traefik.example.local]
+for i in $(grep -Rl 'mtls.demo.traefiklabs.tech'); do sed -i '' 's/mtls.demo.traefiklabs.tech/'$mtls.demo.traefiklabs.tech'/g' $i; done
+```
+
 ### Install Traefik
 
 ```
