@@ -12,8 +12,8 @@ curl -L https://istio.io/downloadIstio | sh -
 ### Set Traefik Public Domain
 set env variable with the domain suffix for dashboard and app (replace with your own)
 ```
-export mtls.demo.traefiklabs.tech=[traefik.example.local]
-for i in $(grep -Rl 'mtls.demo.traefiklabs.tech'); do sed -i '' 's/mtls.demo.traefiklabs.tech/'$mtls.demo.traefiklabs.tech'/g' $i; done
+export TRAEFIK_DOMAIN=[traefik.example.local]
+sed -i '' 's/TRAEFIK_DOMAIN/'$TRAEFIK_DOMAIN'/g' app/app.yaml traefik/dashboard.yaml
 ```
 
 ### Install Traefik
